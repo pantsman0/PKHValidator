@@ -57,7 +57,7 @@ namespace PokeHomeValidator
                 }
 
                 richTextBox1.AppendText($"Validity report:\n\n Valid Pokemon Count: {valid.Count}\nInvalid Pokemon Count: {invalid.Count}\n\nInvalid Pokemon:\n");
-                foreach (var poke in invalid) { richTextBox1.AppendText($"{poke.Item1}:\n Message: {poke.Item2}\n\n"); }
+                foreach (var poke in invalid) { richTextBox1.AppendText($"{poke.Item1}:\r\nMessage:\r\n{poke.Item2}\r\n\r\n"); }
                 richTextBox1.SelectionStart = richTextBox1.Text.Length;
                 richTextBox1.ScrollToCaret();
 
@@ -110,18 +110,18 @@ namespace PokeHomeValidator
                     savegame = new SAV7b();
                     pkm = pk.ConvertToPB7();
                 }
-                else { return (false, $"Error: no valid switch game found for pokemon species {pk.Species}"); }
+                else { return (false, $"GO pokemon: {pk.Met_Location == Locations.GO7 || pk.Met_Location == Locations.GO8}\r\nOT: {pk.OT_Name}\r\nError: no valid switch game found for pokemon species {pk.Species}"); }
 
 
 
                 savegame.AdaptPKM(pkm);
                 if (pkm == null)
                 {
-                    return (false, "Error: unable to adapt pokemon to target game.");
+                    return (false, "GO pokemon: {pk.Met_Location == Locations.GO7 || pk.Met_Location == Locations.GO8}\r\nOT: {pk.OT_Name}\r\nError: unable to adapt pokemon to target game.");
                 }
                 var legality = new LegalityAnalysis(pkm);
-                if (legality.Valid) { return (true,"Valid!"); }
-                return (false, $"Error: Invalid Pokemon.\n Report: {legality.Report(false)} | GO pokemon: {pk.Met_Location == Locations.GO7 || pk.Met_Location == Locations.GO8} | My OT: {pk.OT_Name} ");
+                if (legality.Valid) { return (true, "GO pokemon: {pk.Met_Location == Locations.GO7 || pk.Met_Location == Locations.GO8}\r\nOT: {pk.OT_Name}\r\nValid!"); }
+                return (false, $"GO pokemon: {pk.Met_Location == Locations.GO7 || pk.Met_Location == Locations.GO8}\r\nOT: {pk.OT_Name}\r\nError: Invalid Pokemon.\n Report: {legality.Report(false)}");
             } catch (Exception ex) { return (false, $"Error: unable to process file.\nFileName: {fileName}\nError Message: {ex.Message}"); }
         }
     }
